@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
 @theme {
+  --font-encode-sans-semi-expanded: 'Encode Sans Semi Expanded', sans-serif;
+  --font-encode-sans-expanded: 'Encode Sans Expanded', sans-serif;
+
   --color-purple-100: #F5F3FF;
+  --color-purple-200: #F4F2FF;
   --color-purple-300: #695CCD;
   --color-purple-400: #6A5DCE;
   --color-purple-700: #1F1283;
@@ -9,6 +13,7 @@
   --color-purple-900: #1C1930;
 
   --color-gray-300: #717171;
+  --color-gray-400: #8C8B93;
   --color-gray-500: #1E1E1E;
   --color-gray-700: #1E1E1E;
 
@@ -17,7 +22,7 @@
   --color-white: #FFFFFF;
 }
 
-body {
-  background-color: var(--color-purple-900);
-  color: var(--color-white);
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
 }
