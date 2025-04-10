@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import EmptyState from '../components/EmptyState.vue';
-import Header from '../components/Header.vue'
+// import EmptyState from '../components/EmptyState.vue';
+import ProjectList from '../components/ProjectList.vue';
 </script>
 <template>
-    <Header />
-    <EmptyState />
+    <!-- <EmptyState /> -->
+    <ProjectList />
 </template>
