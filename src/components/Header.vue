@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
+import { nextTick, ref, watch } from 'vue';
 import SearchIcon from '../assets/icons/search.svg'
 import SearchInput from './SearchInput.vue';
+import { router } from '../router';
 
 const showSearchInput = ref(false);
 const searchInputRef = ref<InstanceType<typeof SearchInput> | null>(null);
@@ -19,6 +20,10 @@ const handleKeyDown = (event: KeyboardEvent) => {
     }
 };
 
+function handleGoToHome() {
+    router.push('/');
+}
+
 watch(showSearchInput, async (visible) => {
     if (visible) {
         await nextTick();
@@ -32,15 +37,10 @@ watch(showSearchInput, async (visible) => {
     }
 });
 
-onBeforeUnmount(() => {
-    document.removeEventListener('click', handleClickOutside);
-    window.removeEventListener('keydown', handleKeyDown);
-});
-
 </script>
 <template>
     <header class="flex items-center justify-center bg-purple-900">
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3 cursor-pointer" @click="handleGoToHome">
             <img src="../assets/images/logo.svg" alt="Gerenciador de Projetos Logo">
             <h5 class="text-white">Gerenciador <br> de Projetos</h5>
         </div>

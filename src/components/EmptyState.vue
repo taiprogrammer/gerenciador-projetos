@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 function navigateToCreateProject() {
-    router.push('/create-project')
+    router.push('/create')
 }
 </script>
 <template>

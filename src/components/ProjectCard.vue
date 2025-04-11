@@ -2,115 +2,112 @@
 import Cover from './Cover.vue';
 import DotsIcon from '../assets/icons/dots.svg'
 import StarIcon from '../assets/icons/star.svg'
-// import StarFilledIcon from '../assets/icons/star-filled.svg'
+import StarFilledIcon from '../assets/icons/star-filled.svg'
 import CalendarDayIcon from '../assets/icons/calendar-day.svg'
 import CalendarCheckIcon from '../assets/icons/calendar-check.svg'
+import EditIcon from '../assets/icons/edit.svg'
+import TrashIcon from '../assets/icons/trash.svg'
+
+
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useSearchStore } from '../stores/search';
+import type { ProjectType } from '../types/project';
+import { formatDate } from '../utils/formartDate';
+import { api } from '../server';
 
 const props = defineProps({
-    projectId: {
-        type: Number,
-        required: true,
-        default: 1
-    },
-    projectTitle: {
-        type: String,
+    project: {
+        type: Object as () => ProjectType,
         required: true,
     },
-    clientName: {
-        type: String,
-    },
-    startDate: {
-        type: String,
-        default: '01 de setembro de 2024'
-    },
-    endDate: {
-        type: String,
-        default: '12 de dezembro de 2024'
-    },
-    isFavorite: {
-        type: Boolean,
-        default: false
-    }
-});
+})
 
-// const favorite = ref(props.isFavorite);
+const favorite = ref(props.project.favorite);
 const menuOpen = ref(false);
 const searchStore = useSearchStore()
 
-// const toggleFavorite = () => {
-//   favorite.value = !favorite.value;
-//   emit('toggleFavorite', {
-//     projectId: props.projectId,
-//     isFavorite: favorite.value
-//   });
-// };
+function handleFavorite() {
+    api.put(`/projects/${props.project.id}`, {
+        ...props.project,
+        favorite: !favorite.value
+    })
+        .then(() => {
+            favorite.value = !favorite.value;
+        }).catch((error) => {
+            console.error('Error updating project:', error);
+        });
+}
 
 const highlightedTitle = computed(() => {
-  const term = searchStore.term.trim()
-  if (!term) return props.projectTitle
+    const term = searchStore.term.trim()
+    if (!term) return props.project.name
 
-  const regex = new RegExp(`(${term})`, 'gi')
-  return props.projectTitle.replace(regex, '<span class="bg-yellow-500 text-white font-bold rounded">$1</span>')
+    const regex = new RegExp(`(${term})`, 'gi')
+    return props.project.name.replace(regex, '<span class="bg-yellow-500 text-white font-bold rounded">$1</span>')
 })
 
 const toggleMenu = () => {
-  menuOpen.value = !menuOpen.value;
-  if (menuOpen.value) {
-    emit('openMenu', props.projectId);
-  }
+    menuOpen.value = !menuOpen.value;
+    if (menuOpen.value) {
+        emit('openMenu', props.project.id);
+    }
 };
 
 const editProject = () => {
-  menuOpen.value = false;
-  emit('editProject', props.projectId);
+    menuOpen.value = false;
+    emit('editProject', props.project.id);
 };
 
 const deleteProject = () => {
-  menuOpen.value = false;
-  emit('deleteProject', props.projectId);
+    menuOpen.value = false;
+    emit('deleteProject', props.project);
 };
 
 const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement | null;
-  if (target && !target.closest('.relative') && menuOpen.value) {
-    menuOpen.value = false;
-  }
+    const target = event.target as HTMLElement | null;
+    if (target && !target.closest('.relative') && menuOpen.value) {
+        menuOpen.value = false;
+    }
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside as (event: MouseEvent) => void);
+    document.addEventListener('click', handleClickOutside as (event: MouseEvent) => void);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+    document.removeEventListener('click', handleClickOutside);
 });
 
 const emit = defineEmits(['toggleFavorite', 'openMenu', 'openProject', 'deleteProject', 'shareProject', 'editProject']);
 </script>
 <template>
-    <div class="rounded-3xl overflow-hidden shadow-md max-w-80">
+    <div class="rounded-3xl overflow-hidden shadow-md max-w-80 bg-white">
         <div class="bg-purple-300 h-60 relative flex justify-center items-center">
-            <Cover />
+            <Cover :image-url="project.imageUrl" :name="project.name" />
 
             <div class="absolute bottom-4 right-4 flex items-center space-x-4">
                 <button class="cursor-pointer">
-                    <StarIcon />
+                    <StarFilledIcon v-if="favorite" @click="handleFavorite" />
+                    <StarIcon v-else @click="handleFavorite" />
                 </button>
-                <button
-                    @click="toggleMenu"
+                <button @click="toggleMenu"
                     class="bg-white rounded-full p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition-colors cursor-pointer">
                     <DotsIcon />
                 </button>
                 <div v-show="menuOpen"
                     class="absolute right-0 top-11 w-48 bg-white rounded-lg shadow-lg py-1 z-10 transform origin-top-right transition-all duration-200 ease-out"
                     :class="menuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'">
-                    <a href="#" @click.prevent="editProject"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Editar projeto</a>
+                    <button @click.prevent="editProject"
+                        class="px-5 py-3.5 text-purple-300 flex items-center gap-3 hover:bg-indigo-50 w-full cursor-pointer">
+                        <EditIcon />
+                        <span>Editar</span>
+                    </button>
                     <div class="border-t border-gray-100"></div>
-                    <a href="#" @click.prevent="deleteProject"
-                        class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Excluir</a>
+                    <button @click.prevent="deleteProject"
+                    class="px-5 py-3.5 text-purple-300 flex items-center gap-3 hover:bg-indigo-50 w-full cursor-pointer">
+                        <TrashIcon />
+                        <span>Remover</span>
+                </button>
                 </div>
             </div>
         </div>
@@ -120,7 +117,7 @@ const emit = defineEmits(['toggleFavorite', 'openMenu', 'openProject', 'deletePr
 
             <div class="flex items-center mb-6 gap-2">
                 <span class="text-gray-300 font-bold">Cliente:</span>
-                <span class="text-gray-300">{{ clientName }}</span>
+                <span class="text-gray-300">{{ props.project.customer }}</span>
             </div>
 
             <div class="border-t border-gray-200 pt-4">
@@ -129,14 +126,14 @@ const emit = defineEmits(['toggleFavorite', 'openMenu', 'openProject', 'deletePr
                     <div class="text-gray-300 mr-3">
                         <CalendarDayIcon />
                     </div>
-                    <span class="text-gray-600">01 de setembro de 2024</span>
+                    <span class="text-gray-600">{{ formatDate(props.project.startDate) }}</span>
                 </div>
 
                 <div class="flex items-center">
                     <div class="text-gray-300 mr-3">
                         <CalendarCheckIcon />
                     </div>
-                    <span class="text-gray-600">12 de dezembro de 2024</span>
+                    <span class="text-gray-600">{{ formatDate(props.project.endDate) }}</span>
                 </div>
             </div>
         </div>

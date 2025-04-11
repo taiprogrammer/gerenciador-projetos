@@ -5,10 +5,10 @@ const isFavoriteOnly = ref(false);
 
 const toggleFavorites = () => {
     isFavoriteOnly.value = !isFavoriteOnly.value;
-    emit('update:modelValue', isFavoriteOnly.value);
+    emit('getFavorites', isFavoriteOnly.value);
 };
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['getFavorites']);
 </script>
 <template>
     <div class="flex items-center cursor-pointer select-none" @click="toggleFavorites">
