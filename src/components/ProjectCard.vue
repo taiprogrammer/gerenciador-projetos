@@ -46,24 +46,24 @@ const highlightedTitle = computed(() => {
     return props.project.name.replace(regex, '<span class="bg-yellow-500 text-white font-bold rounded">$1</span>')
 })
 
-const toggleMenu = () => {
+function toggleMenu() {
     menuOpen.value = !menuOpen.value;
     if (menuOpen.value) {
         emit('openMenu', props.project.id);
     }
 };
 
-const editProject = () => {
+function editProject() {
     menuOpen.value = false;
     emit('editProject', props.project.id);
 };
 
-const deleteProject = () => {
+function deleteProject() {
     menuOpen.value = false;
     emit('deleteProject', props.project);
 };
 
-const handleClickOutside = (event: MouseEvent) => {
+function handleClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement | null;
     if (target && !target.closest('.relative') && menuOpen.value) {
         menuOpen.value = false;

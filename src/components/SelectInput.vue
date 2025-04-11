@@ -21,7 +21,7 @@ const selectOption = (option: Option) => {
     emit('change', option);
 };
 
-const close = () => {
+function close() {
     isOpen.value = false;
 };
 

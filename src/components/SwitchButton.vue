@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 const isFavoriteOnly = ref(false);
 
-const toggleFavorites = () => {
+function toggleFavorites() {
     isFavoriteOnly.value = !isFavoriteOnly.value;
     emit('getFavorites', isFavoriteOnly.value);
 };

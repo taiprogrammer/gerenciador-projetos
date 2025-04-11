@@ -11,7 +11,7 @@ defineProps({
 
 const isOpen = ref(false);
 
-const close = () => {
+function close() {
     isOpen.value = false;
     document.body.classList.add('overflow-hidden')
 };
