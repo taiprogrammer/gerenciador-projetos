@@ -49,14 +49,14 @@ Este projeto é uma aplicação web para gerenciamento de projetos, desenvolvida
 5. **Acesse a aplicação em `http://localhost:5173`
 
 ## 📁 Estrutura do Projeto
-src/
-├── assets/            # Ícones e imagens
-├── components/        # Componentes reutilizáveis
-├── pages/             # Páginas (Home, CreateProject, etc)
-├── server/            # Configuração do axios
-├── stores/            # Pinia stores
-├── utils/             # Helpers como toBase64
-├── App.vue
-├── main.ts
+- `src/`
+- `assets/` : Ícones e imagens
+- `components/` : Componentes reutilizáveis
+- `pages/`: Páginas (Home, CreateProject, etc)
+- `server/` : Configuração do axios
+- `stores/` : Pinia stores
+- `utils/` : Helpers como toBase64
+- `App.vue`
+- `main.ts`
 
 Feito com ❤️ por [Taiza Marques Sousa](https://github.com/taiprogrammer)
