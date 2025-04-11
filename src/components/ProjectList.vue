@@ -2,6 +2,8 @@
 import SelectInput from "./SelectInput.vue";
 import ProjectCard from "./ProjectCard.vue";
 import DeleteModal from "./DeleteModal.vue";
+import NotFound from "./NotFound.vue";
+
 import SwitchButton from "./SwitchButton.vue";
 import PlusIcon from "../assets/icons/plus.svg";
 
@@ -152,56 +154,33 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header
-    class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 px-4 sm:px-10 mt-10"
-  >
+  <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-6 px-4 sm:px-10 mt-10">
     <h4 class="text-purple-700 text-2xl font-semibold">
       Projetos
-      <span class="text-purple-300 font-normal text-base"
-        >({{ filteredProjects.length }})</span
-      >
+      <span class="text-purple-300 font-normal text-base">({{ filteredProjects.length }})</span>
     </h4>
 
-    <div
-      class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full sm:w-auto sm:max-w-3xl justify-end"
-    >
+    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 w-full sm:w-auto sm:max-w-3xl justify-end">
       <div class="flex items-center gap-2">
         <SwitchButton @get-favorites="handleGetFavorites" />
-        <span class="text-purple-900 text-sm sm:text-base whitespace-nowrap"
-          >Apenas Favoritos</span
-        >
+        <span class="text-purple-900 text-sm sm:text-base whitespace-nowrap">Apenas Favoritos</span>
       </div>
-      <SelectInput
-        ref="selectInputRef"
-        class="w-full sm:w-[250px]"
-        @search="handleSearch"
-        @change="filterProjectBy"
-      />
-      <button
-        @click="goToCreateProject"
-        class="flex items-center justify-center text-white bg-purple-300 py-2 px-6 rounded-3xl text-sm sm:text-base whitespace-nowrap cursor-pointer :hover:opacity-80 transition-all duration-200"
-      >
+      <SelectInput ref="selectInputRef" class="w-full sm:w-[250px]" @search="handleSearch" @change="filterProjectBy" />
+      <button @click="goToCreateProject"
+        class="flex items-center justify-center text-white bg-purple-300 py-2 px-6 rounded-3xl text-sm sm:text-base whitespace-nowrap cursor-pointer :hover:opacity-80 transition-all duration-200">
         <PlusIcon />
         <span class="ml-1">Novo projeto</span>
       </button>
     </div>
   </header>
 
-  <main
-    class="my-6 mx-4 sm:mx-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-8"
-  >
-    <ProjectCard
-      v-for="project in projectsToShow"
-      :key="project.id"
-      :project="project"
-      @delete-project="deleteProject"
-      @edit-project="editProject"
-    />
+  <main class="my-6 mx-4 sm:mx-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 sm:gap-8">
+    <template v-if="projectsToShow.length > 0">
+      <ProjectCard v-for="project in projectsToShow" :key="project.id" :project="project"
+        @delete-project="deleteProject" @edit-project="editProject" />
+    </template>
+      <NotFound v-else/>
   </main>
 
-  <DeleteModal
-    ref="deleteModalRef"
-    @delete-project-confirm="handleDeleteProject"
-    :name="projectNameSelected"
-  />
+  <DeleteModal ref="deleteModalRef" @delete-project-confirm="handleDeleteProject" :name="projectNameSelected" />
 </template>
