@@ -27,8 +27,6 @@ Este projeto é uma aplicação web para gerenciamento de projetos, desenvolvida
 
     ```bash
         git clone https://github.com/taiprogrammer/gerenciador-projetos.git
-
-    ```bash
         cd gerenciador-projetos
 
 2. **Instale as dependências
