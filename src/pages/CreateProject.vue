@@ -62,7 +62,7 @@ async function handleSubmit(event: Event) {
   if (hasErrors) return;
 
   try {
-    const response = await api.put("/projects/", {
+    const response = await api.post("/projects/", {
       name: name.value,
       customer: customer.value,
       startDate: startDate.value,
@@ -100,17 +100,16 @@ function navigateToHome() {
 
     <form @submit.prevent="handleSubmit"
       class="flex items-center justify-center mt-8 rounded-lg border border-gray-100 p-6 sm:p-12">
-      <div class="flex flex-col gap-8 w-full md:w-1/2">
+      <div class="flex flex-col gap-8 w-full max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
         <div class="flex flex-col gap-1">
           <label for="name" class="text-lg font-medium" :class="errors.name ? 'text-red-500' : 'text-purple-300'">
             Nome do projeto
             <span class="text-sm font-normal" :class="errors.name ? 'text-red-500' : 'text-gray-300'">(Obrigatório)</span>
           </label>
           <input v-model="name" type="text" id="name"
-            class="rounded border bg-white focus:outline-0 p-2" :class="errors.name ? 'border-red-500 text-red-500' : 'border-gray-300 text-gray-300'" />
-          <span v-if="errors.name" class="text-red-500 text-sm mt-1">{{
-            errors.name
-            }}</span>
+            class="rounded border bg-white focus:outline-0 p-2"
+            :class="errors.name ? 'border-red-500 text-red-500' : 'border-gray-300 text-gray-300'" />
+          <span v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</span>
         </div>
 
         <div class="flex flex-col gap-1">
@@ -120,14 +119,10 @@ function navigateToHome() {
           </label>
           <input v-model="customer" type="text" id="customer"
             class="rounded border bg-white focus:outline-0 p-2"
-            :class="errors.customer ? 'border-red-500 text-red-500' : 'border-gray-300 text-gray-300'"
-            />
-          <span v-if="errors.customer" class="text-red-500 text-sm mt-1">{{
-            errors.customer
-            }}</span>
+            :class="errors.customer ? 'border-red-500 text-red-500' : 'border-gray-300 text-gray-300'" />
         </div>
 
-        <div class="flex flex-col sm:flex-row gap-6 justify-between w-full">
+        <div class="flex flex-col gap-6 sm:flex-row sm:gap-4 justify-between w-full">
           <div class="flex flex-col gap-1 w-full">
             <label for="startDate" class="text-purple-300 text-lg font-medium">Data de Início
               <span class="text-sm text-gray-300 font-normal">(Obrigatório)</span>
@@ -135,7 +130,6 @@ function navigateToHome() {
             <div class="relative w-full">
               <input v-model="startDate" type="date" id="startDate" :min="todayString"
                 class="rounded w-full border border-gray-300 bg-white focus:outline-0 p-2 pr-10 text-gray-300 date-input" />
-
               <div class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-300">
                 <CalendarCheckIcon />
               </div>

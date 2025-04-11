@@ -106,7 +106,7 @@ onMounted(() => {
     </header>
 
     <div class="flex items-center justify-center mt-8 rounded-lg border border-gray-100 p-6 sm:p-12">
-      <form @submit.prevent="handleSubmit" class="flex flex-col gap-8 w-full md:w-1/2">
+      <form @submit.prevent="handleSubmit" class="flex flex-col gap-8 w-full max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl">
 
         <div class="flex flex-col gap-1">
           <label for="name" class="text-lg font-medium" :class="errors.name ? 'text-red-500' : 'text-purple-300'">
